@@ -1,0 +1,41 @@
+{
+  "name": "table-open-reviews-component",
+  "version": "",
+  "description": "Reviews component for TableOpen project, which is replicating OpenTable's restaurant web page.",
+  "main": "index.js",
+  "author": "MLJ",
+  "license": "ISC",
+  "engines": {
+    "node": ">=6.13.0"
+  },
+  "scripts": {
+    "react-dev": "webpack -d --watch",
+    "server-dev": "nodemon server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hrnyc18-tableOpen/Reviews.git"
+  },
+  "homepage": "https://github.com/hrnyc18-tableOpen/Reviews#README",
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "babel-core": "^6.23.3",
+    "babel-loader": "^7.1.5",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0",
+    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bluebird": "^3.5.2",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.0",
+    "mysql": "^2.15.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
+  }
+}
