@@ -12,7 +12,7 @@ CREATE TABLE users
   username VARCHAR(35) NOT NULL,
   hometown VARCHAR(35) NOT NULL,
   numOfReviews INT NOT NULL,
-  VIP BINARY NOT NULL
+  vip BINARY NOT NULL,
   iconColor VARCHAR(35) NOT NULL,
   abbreviation VARCHAR(2) NOT NULL,
   PRIMARY KEY (id)
@@ -37,7 +37,7 @@ CREATE TABLE reviews
   serviceRating INT NOT NULL,
   ambienceRating INT NOT NULL,
   valueRating INT NOT NULL,
-  noiseLevel INT NOT NULL,
+  noiseLevel INT,
   dinedDate DATE NOT NULL,
   reviewText VARCHAR(2000),
   isRecommended BINARY,
