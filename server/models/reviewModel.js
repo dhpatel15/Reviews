@@ -57,7 +57,7 @@ module.exports = {
   },
   getRestaurantById: (id) => {
     return queryPromise(
-      `SELECT * FROM restuarants
+      `SELECT * FROM restaurants
       WHERE id=?`,
       [id]
     )

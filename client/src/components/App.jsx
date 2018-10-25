@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {OverviewTitle, OverviewHeading, OverviewText, StarDiv, StarIcons, StarText, RatingBar, RatingBarBorder} from '../../styledComponents/styledComponents.jsx';
 
 class App extends React.Component {
@@ -6,7 +7,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       reviews: [],
-      restaurant: {},
+      restaurantId: '',
+      restaurantLocation: '',
+      lovedFor: '',
       overallRating: null,
       overallRatings: [90, 80, 70, 60, 50],
       overallNums: ['5', '4', '3', '2', '1'],
@@ -17,6 +20,22 @@ class App extends React.Component {
       noiseLevel: '',
       recommend: undefined
     };
+    this.getRestaurant = this.getRestaurant.bind(this);
+  }
+
+  getRestaurant(id) {
+    return axios.get('/restaurants', {params: {id: id}})
+      .then(({data}) => {
+        this.setState({
+          restaurantLocation: data[0].location,
+          lovedFor: data[0].lovedFor
+        });
+      });
+  }
+
+  componentDidMount() {
+    let restaurantId = Number(window.location.pathname.slice(12)).toString();
+    this.getRestaurant(restaurantId);
   }
 
   render() {
