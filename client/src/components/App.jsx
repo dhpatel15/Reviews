@@ -81,7 +81,7 @@ class App extends React.Component {
           }
           if (review.isRecommended !== null) {
             recommend.count++;
-            recommend.sum += (review.isRecommended.data[0] - 48);
+            recommend.sum += review.isRecommended;
           }
         });
         let noiseLevels = {

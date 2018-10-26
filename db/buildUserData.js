@@ -4,7 +4,6 @@ const db = require('./index.js');
 
 for (let x = 0; x < 100; x++) {
   model.addUser(buildData.userDataMaker())
-    .then(() => console.log('userAdded'))
     .done();
 }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import User from './User.jsx';
+import ReviewOverview from './ReviewOverview.jsx';
 import styled from 'styled-components';
 
 const ReviewBody = styled.div`
@@ -21,6 +22,7 @@ class Review extends React.Component {
     return (
       <ReviewBody>
         <User review={this.props.review}></User>
+        <ReviewOverview review={this.props.review}></ReviewOverview>
       </ReviewBody>
     );
   }

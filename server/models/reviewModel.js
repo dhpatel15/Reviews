@@ -78,5 +78,17 @@ module.exports = {
           console.error(err);
         }
       });
+  },
+  getReviewsByUserId: (id) => {
+    return queryPromise(
+      `SELECT * FROM reviews
+      WHERE userId=?`,
+      [id]
+    )
+      .catch((err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
   }
 };

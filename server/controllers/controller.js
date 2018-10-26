@@ -20,3 +20,10 @@ exports.getReviews = (req, res) => {
       res.send(reviews);
     });
 };
+
+exports.getUserReviews = (req, res) => {
+  model.getReviewsByUserId(req.query.id)
+    .then((reviews) => {
+      res.send(reviews);
+    });
+};

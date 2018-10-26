@@ -4,7 +4,6 @@ const db = require('./index.js');
 
 for (let x = 0; x < 100; x++) {
   model.addRestaurant(buildData.restaurantDataMaker())
-    .then(() => console.log('restaurantAdded'))
     .done();
 }
 
