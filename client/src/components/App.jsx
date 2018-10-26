@@ -1,6 +1,19 @@
 import React from 'react';
 import axios from 'axios';
-import {OverviewTitle, OverviewHeading, OverviewText, StarDiv, StarIcons, StarText, RatingBar, RatingBarBorder} from '../../styledComponents/styledComponents.jsx';
+import Overview from './Overview.jsx';
+import Review from './Review.jsx';
+import styled from 'styled-components';
+
+const Body = styled.div`
+  font-family: BrandonText,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  -webkit-font-smoothing: antialiased;
+`;
+
+const ReviewsBody = styled.div`
+  padding: 0;
+  margin: 0;
+  display: block;
+`;
 
 class App extends React.Component {
   constructor(props) {
@@ -11,9 +24,9 @@ class App extends React.Component {
       restaurantLocation: '',
       lovedFor: '',
       overallRating: null,
-      overallRatings: [90, 80, 70, 60, 50],
+      overallRatings: [0, 0, 0, 0, 0],
       overallNums: ['5', '4', '3', '2', '1'],
-      otherRatings: [3, 3, 3, 3, 3],
+      otherRatings: [],
       ratingNames: ['Food', 'Service', 'Ambience', 'Value'],
       ambienceRating: undefined,
       valueRating: undefined,
@@ -21,10 +34,11 @@ class App extends React.Component {
       recommend: undefined
     };
     this.getRestaurant = this.getRestaurant.bind(this);
+    this.getReviews = this.getReviews.bind(this);
   }
 
   getRestaurant(id) {
-    return axios.get('/restaurants', {params: {id: id}})
+    axios.get('/restaurants', {params: {id: id}})
       .then(({data}) => {
         this.setState({
           restaurantLocation: data[0].location,
@@ -33,103 +47,104 @@ class App extends React.Component {
       });
   }
 
+  getReviews(id) {
+    axios.get('/reviews', {params: {id: id}})
+      .then(({data}) => {
+        let len = data.length;
+        let overallSum = 0;
+        let overallCount = {
+          5: 0,
+          4: 0,
+          3: 0,
+          2: 0,
+          1: 0
+        };
+        let otherSums = [0, 0, 0, 0];
+        let noise = {
+          count: 0,
+          sum: 0
+        };
+        let recommend = {
+          count: 0,
+          sum: 0
+        };
+        data.forEach((review) => {
+          overallSum += review.overallRating;
+          overallCount[review.overallRating]++;
+          otherSums[0] += review.foodRating;
+          otherSums[1] += review.serviceRating;
+          otherSums[2] += review.ambienceRating;
+          otherSums[3] += review.valueRating;
+          if (review.noiseLevel !== null) {
+            noise.count++;
+            noise.sum += review.noiseLevel;
+          }
+          if (review.isRecommended !== null) {
+            recommend.count++;
+            recommend.sum += (review.isRecommended.data[0] - 48);
+          }
+        });
+        let noiseLevels = {
+          1: 'Quiet',
+          2: 'Moderate',
+          3: 'Energetic'
+        };
+        let noiseLevel = noiseLevels[Math.round(noise.sum / noise.count)];
+        
+        let overallRatings = [];
+        for (let x = 0; x < 5; x++) {
+          overallRatings.push(Math.round(overallCount[5 - x] / len * 100));
+        }
+        let otherRatings = [];
+        for (let x = 0; x < 4; x++) {
+          otherRatings.push((Math.round((otherSums[x] / len) * 10) / 10).toFixed(1));
+        }
+        let overallRating = Math.round((overallSum / len) * 10) / 10;
+        let recommendPercent = Math.round((recommend.sum / recommend.count) * 100);
+
+        this.setState({
+          reviews: data,
+          overallRating: overallRating,
+          overallRatings: overallRatings,
+          otherRatings: otherRatings,
+          ratingNames: ['Food', 'Service', 'Ambience', 'Value'],
+          noiseLevel: noiseLevel,
+          recommend: recommendPercent
+        });
+      });
+  }
+
   componentDidMount() {
     let restaurantId = Number(window.location.pathname.slice(12)).toString();
     this.getRestaurant(restaurantId);
+    this.getReviews(restaurantId);
   }
 
   render() {
     return (
-      <React.Fragment>
-        <OverviewTitle>What {this.state.reviews.length} People Are Saying</OverviewTitle>
-        <div>
-          <div>
-            <OverviewHeading>Overall ratings and reviews</OverviewHeading>
-            <OverviewText>Reviews can only be made by diners who have eaten at this restaurant</OverviewText>
-            <StarDiv>
-              <StarIcons>
-                <i>Star</i>
-                <i>Star</i>
-                <i>Star</i>
-                <i>Star</i>
-                <i>Star</i>
-              </StarIcons>
-              <StarText>
-                <span>{this.state.overallRating}</span>
-                <span>based on recent ratings</span>
-              </StarText>
-            </StarDiv>
-            <div>
-              <div>
-                <div>{this.state.otherRatings[0]}</div>
-                <div>{this.state.ratingNames[0]}</div>
-              </div>
-              <div>
-                <div>{this.state.otherRatings[1]}</div>
-                <div>{this.state.ratingNames[1]}</div>
-              </div>
-              <div>
-                <div>{this.state.otherRatings[2]}</div>
-                <div>{this.state.ratingNames[2]}</div>
-              </div>
-              <div>
-                <div>{this.state.otherRatings[3]}</div>
-                <div>{this.state.ratingNames[3]}</div>
-              </div>
-              <div>
-                <div>
-                  <div>
-                    <i></i>
-                  </div>
-                  <div>Noise&nbsp;·&nbsp;<span>{this.state.noiseLevel}</span></div>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <div>
-                    <i></i>
-                  </div>
-                  <div>85% of people&nbsp;<span>would recommend it to a friend</span></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div>
-              <div>
-                <span>{this.state.overallNums[0]}</span>
-                <RatingBarBorder>
-                  <RatingBar style={{width: this.state.overallRatings[0] + '%'}}></RatingBar>
-                </RatingBarBorder>
-              </div>
-              <div>
-                <span>{this.state.overallNums[1]}</span>
-                <RatingBarBorder>
-                  <RatingBar style={{width: this.state.overallRatings[1] + '%'}}></RatingBar>
-                </RatingBarBorder>
-              </div>
-              <div>
-                <span>{this.state.overallNums[2]}</span>
-                <RatingBarBorder>
-                  <RatingBar style={{width: this.state.overallRatings[2] + '%'}}></RatingBar>
-                </RatingBarBorder>
-              </div>
-              <div>
-                <span>{this.state.overallNums[3]}</span>
-                <RatingBarBorder>
-                  <RatingBar style={{width: this.state.overallRatings[3] + '%'}}></RatingBar>
-                </RatingBarBorder>
-              </div>
-              <div>
-                <span>{this.state.overallNums[4]}</span>
-                <RatingBarBorder>
-                  <RatingBar style={{width: this.state.overallRatings[4] + '%'}}></RatingBar>
-                </RatingBarBorder>
-              </div>
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
+      <Body>
+        <Overview
+          reviews={this.state.reviews}
+          overallRating={this.state.overallRating}
+          otherRatings={this.state.otherRatings}
+          ratingNames={this.state.ratingNames}
+          noiseLevel={this.state.noiseLevel}
+          recommend={this.state.recommend}
+          overallNums={this.state.overallNums}
+          overallRatings={this.state.overallRatings}
+          restaurantLocation={this.state.restaurantLocation}
+        ></Overview>
+        <ReviewsBody>
+          {this.state.reviews.map((review) => {
+            return (
+              <Review
+                key={review.id}
+                review={review}
+              ></Review>
+            );
+          })}
+        </ReviewsBody>
+      </Body>
     );
   }
 }
