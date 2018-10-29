@@ -38,7 +38,7 @@ CREATE TABLE reviews
   ambienceRating INT NOT NULL,
   valueRating INT NOT NULL,
   noiseLevel INT,
-  dinedDate DATE NOT NULL,
+  dinedDate BIGINT NOT NULL,
   reviewText VARCHAR(2000),
   isRecommended INT,
   recommendFor VARCHAR(709),

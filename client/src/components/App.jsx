@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Overview from './Overview.jsx';
 import Review from './Review.jsx';
+import PageBar from './PageBar.jsx';
 import styled from 'styled-components';
 
 const Body = styled.div`
@@ -31,10 +32,15 @@ class App extends React.Component {
       ambienceRating: undefined,
       valueRating: undefined,
       noiseLevel: '',
-      recommend: undefined
+      recommend: undefined,
+      currentPage: 1,
+      pages: [],
+      currentReviews: []
     };
     this.getRestaurant = this.getRestaurant.bind(this);
     this.getReviews = this.getReviews.bind(this);
+    this.getPages = this.getPages.bind(this);
+    this.newPage = this.newPage.bind(this);
   }
 
   getRestaurant(id) {
@@ -109,9 +115,30 @@ class App extends React.Component {
           otherRatings: otherRatings,
           ratingNames: ['Food', 'Service', 'Ambience', 'Value'],
           noiseLevel: noiseLevel,
-          recommend: recommendPercent
+          recommend: recommendPercent,
+          pages: this.getPages(data),
+          currentReviews: data.slice(0, 50)
         });
       });
+  }
+
+  getPages(reviews) {
+    let len = reviews.length;
+    let i = 1;
+    let array = [];
+    while (len > 0) {
+      array.push(i++);
+      len -= 50;
+    }
+    return array;
+  }
+
+  newPage(pageNumber) {
+    let start = (pageNumber - 1) * 50;
+    this.setState({
+      currentPage: pageNumber,
+      currentReviews: this.state.reviews.slice(start, start + 50)
+    });
   }
 
   componentDidMount() {
@@ -135,7 +162,7 @@ class App extends React.Component {
           restaurantLocation={this.state.restaurantLocation}
         ></Overview>
         <ReviewsBody>
-          {this.state.reviews.map((review) => {
+          {this.state.currentReviews.map((review) => {
             return (
               <Review
                 key={review.id}
@@ -143,6 +170,11 @@ class App extends React.Component {
               ></Review>
             );
           })}
+          <PageBar
+            pages={this.state.pages}
+            currentPage={this.state.currentPage}
+            newPage={this.newPage}
+          ></PageBar>
         </ReviewsBody>
       </Body>
     );

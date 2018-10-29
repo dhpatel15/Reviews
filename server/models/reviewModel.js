@@ -46,7 +46,7 @@ module.exports = {
   getUserById: (id) => {
     return queryPromise(
       `SELECT * FROM users
-      WHERE id=?`,
+      WHERE id = ?`,
       [id]
     )
       .catch((err) => {
@@ -58,7 +58,7 @@ module.exports = {
   getRestaurantById: (id) => {
     return queryPromise(
       `SELECT * FROM restaurants
-      WHERE id=?`,
+      WHERE id = ?`,
       [id]
     )
       .catch((err) => {
@@ -70,7 +70,8 @@ module.exports = {
   getReviewsByRestaurantId: (id) => {
     return queryPromise(
       `SELECT * FROM reviews
-      WHERE restaurantId=?`,
+      WHERE restaurantId = ?
+      ORDER BY dinedDate DESC`,
       [id]
     )
       .catch((err) => {
@@ -82,7 +83,7 @@ module.exports = {
   getReviewsByUserId: (id) => {
     return queryPromise(
       `SELECT * FROM reviews
-      WHERE userId=?`,
+      WHERE userId = ?`,
       [id]
     )
       .catch((err) => {

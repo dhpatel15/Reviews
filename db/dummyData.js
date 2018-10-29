@@ -260,7 +260,7 @@ const opinion = ['loved', 'hated', 'enjoyed', 'couldn\'t stand', 'liked', 'disli
 const place = ['this restaurant', 'this place', 'the food', 'the ambience', 'the location', 'the service', 'the drinks', 'the dessert', 'the price', 'the noise', 'the building', 'the waiter', 'the waitress', 'the owner', 'the hostess', 'the crowd', 'the music'];
 const pronoun = ['My', 'Her', 'Our', 'Their', 'His'];
 const adjective = ['favorite item', 'least favorite item', 'meal', 'preference', 'most-liked item', 'least-liked item'];
-const food = ['steak', 'lobster', 'pizza', 'beer', 'chicken fingers', 'burger', 'wine', 'cocktails', 'pasta', 'oysters', 'seafood', 'mac and cheese', 'sandwiches', 'sushi', 'soup', 'salad', 'drinks', 'menu', 'noodles', 'rice', 'ice cream', 'cheesecake', 'nachos', 'tacos', 'burriots'];
+const food = ['steak', 'lobster', 'pizza', 'beer', 'chicken fingers', 'burger', 'wine', 'cocktails', 'pasta', 'oysters', 'seafood', 'mac and cheese', 'sandwiches', 'sushi', 'soup', 'salad', 'drinks', 'menu', 'noodles', 'rice', 'ice cream', 'cheesecake', 'nachos', 'tacos', 'burritos'];
 const punctuation = ['!', '.'];
 const what = ['may', 'will', 'won\'t', 'can\'t', 'will not', 'may not', 'will definitely', 'can', 'want to', 'have to', 'must', 'need to'];
 const eatAgain = ['return', 'come back', 'try it', 'drink here', 'eat here', 'visit', 'go back'];
@@ -284,7 +284,7 @@ exports.reviewDataMaker = () => {
     noiseLevel: randomize([undefined, 1, 2, 3]),
     isRecommended: randomize([undefined, 0, 1]),
     reviewText: reviewTextMaker(),
-    dinedDate: randomDate(new Date(2010, 0, 1), new Date()),
+    dinedDate: randomDate(new Date(2010, 0, 1), new Date()).valueOf(),
     restaurantId: Math.ceil(Math.random() * 100),
     userId: Math.ceil(Math.random() * 100),
     recommendedFor: recommendedForMaker()
