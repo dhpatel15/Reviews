@@ -101,7 +101,7 @@ class User extends React.Component {
   }
 
   getUser() {
-    axios.get('/users', {params: {id: this.props.review.userId}})
+    axios.get('/API/Reviews/users', {params: {id: this.props.review.userId}})
       .then(({data}) => {
         this.setState({
           user: data[0]
@@ -110,7 +110,7 @@ class User extends React.Component {
   }
 
   countUserReviews() {
-    axios.get('/reviews', {params: {id: this.props.review.userId}})
+    axios.get('/API/Reviews/reviews', {params: {id: this.props.review.userId}})
       .then(({data}) => {
         this.setState({
           userReviews: data.length

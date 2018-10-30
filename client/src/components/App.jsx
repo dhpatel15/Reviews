@@ -47,7 +47,7 @@ class App extends React.Component {
   }
 
   getRestaurant(id) {
-    axios.get('/restaurants', {params: {id: id}})
+    axios.get('/API/Reviews/restaurants', {params: {id: id}})
       .then(({data}) => {
         this.setState({
           restaurantLocation: data[0].location,
@@ -57,9 +57,8 @@ class App extends React.Component {
   }
 
   getReviews(id, sort) {
-    axios.get('/reviews', {params: {id: id, choice: sort}})
+    axios.get('/API/Reviews/reviews', {params: {id: id, choice: sort}})
       .then(({data}) => {
-        console.log(data[0])
         let len = data.length;
         let overallSum = 0;
         let overallCount = {
