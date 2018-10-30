@@ -15,7 +15,7 @@ exports.getUsers = (req, res) => {
 };
 
 exports.getReviews = (req, res) => {
-  model.getReviewsByRestaurantId(req.query.id)
+  model.getReviewsByRestaurantId(req.query.id, req.query.choice)
     .then((reviews) => {
       res.send(reviews);
     });
