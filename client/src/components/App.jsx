@@ -3,6 +3,7 @@ import axios from 'axios';
 import Overview from './Overview.jsx';
 import Review from './Review.jsx';
 import PageBar from './PageBar.jsx';
+import Sort from './Sort.jsx';
 import styled from 'styled-components';
 
 const Body = styled.div`
@@ -35,12 +36,14 @@ class App extends React.Component {
       recommend: undefined,
       currentPage: 1,
       pages: [],
-      currentReviews: []
+      currentReviews: [],
+      currentChoice: 'Newest'
     };
     this.getRestaurant = this.getRestaurant.bind(this);
     this.getReviews = this.getReviews.bind(this);
     this.getPages = this.getPages.bind(this);
     this.newPage = this.newPage.bind(this);
+    this.changeChoice = this.changeChoice.bind(this);
   }
 
   getRestaurant(id) {
@@ -53,9 +56,10 @@ class App extends React.Component {
       });
   }
 
-  getReviews(id) {
-    axios.get('/reviews', {params: {id: id}})
+  getReviews(id, sort) {
+    axios.get('/reviews', {params: {id: id, choice: sort}})
       .then(({data}) => {
+        console.log(data[0])
         let len = data.length;
         let overallSum = 0;
         let overallCount = {
@@ -121,6 +125,14 @@ class App extends React.Component {
         });
       });
   }
+  
+  changeChoice(choice) {
+    let restaurantId = Number(window.location.pathname.slice(12)).toString();
+    this.getReviews(restaurantId, choice);
+    this.setState({
+      currentChoice: choice
+    });
+  }
 
   getPages(reviews) {
     let len = reviews.length;
@@ -144,7 +156,7 @@ class App extends React.Component {
   componentDidMount() {
     let restaurantId = Number(window.location.pathname.slice(12)).toString();
     this.getRestaurant(restaurantId);
-    this.getReviews(restaurantId);
+    this.getReviews(restaurantId, this.state.currentChoice);
   }
 
   render() {
@@ -161,6 +173,10 @@ class App extends React.Component {
           overallRatings={this.state.overallRatings}
           restaurantLocation={this.state.restaurantLocation}
         ></Overview>
+        <Sort
+          currentChoice={this.state.currentChoice}
+          changeChoice={this.changeChoice}
+        ></Sort>
         <ReviewsBody>
           {this.state.currentReviews.map((review) => {
             return (
@@ -170,12 +186,12 @@ class App extends React.Component {
               ></Review>
             );
           })}
-          <PageBar
-            pages={this.state.pages}
-            currentPage={this.state.currentPage}
-            newPage={this.newPage}
-          ></PageBar>
         </ReviewsBody>
+        <PageBar
+          pages={this.state.pages}
+          currentPage={this.state.currentPage}
+          newPage={this.newPage}
+        ></PageBar>
       </Body>
     );
   }

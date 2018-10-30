@@ -67,11 +67,15 @@ module.exports = {
         }
       });
   },
-  getReviewsByRestaurantId: (id) => {
+  getReviewsByRestaurantId: (id, choice) => {
+    const sorter = {
+      'Newest': 'SELECT * FROM reviews WHERE restaurantId = ? ORDER BY dinedDate DESC',
+      'Lowest rating': 'SELECT * FROM reviews WHERE restaurantId = ? ORDER BY overallRating ASC',
+      'Highest rating': 'SELECT * FROM reviews WHERE restaurantId = ? ORDER BY overallRating DESC',
+    };
+
     return queryPromise(
-      `SELECT * FROM reviews
-      WHERE restaurantId = ?
-      ORDER BY dinedDate DESC`,
+      sorter[choice],
       [id]
     )
       .catch((err) => {
