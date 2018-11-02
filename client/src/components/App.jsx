@@ -21,7 +21,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      reviews: [],
+      data: [],
       restaurantId: '',
       restaurantLocation: '',
       lovedFor: '',
@@ -39,25 +39,14 @@ class App extends React.Component {
       currentReviews: [],
       currentChoice: 'Newest'
     };
-    this.getRestaurant = this.getRestaurant.bind(this);
     this.getReviews = this.getReviews.bind(this);
     this.getPages = this.getPages.bind(this);
     this.newPage = this.newPage.bind(this);
     this.changeChoice = this.changeChoice.bind(this);
   }
 
-  getRestaurant(id) {
-    axios.get('/API/Reviews/restaurants', {params: {id: id}})
-      .then(({data}) => {
-        this.setState({
-          restaurantLocation: data[0].location,
-          lovedFor: data[0].lovedFor
-        });
-      });
-  }
-
   getReviews(id, sort) {
-    axios.get('/API/Reviews/reviews', {params: {id: id, choice: sort}})
+    axios.get('/API/Reviews/reviews/all', {params: {id: id, choice: sort}})
       .then(({data}) => {
         let len = data.length;
         let overallSum = 0;
@@ -112,7 +101,7 @@ class App extends React.Component {
         let recommendPercent = Math.round((recommend.sum / recommend.count) * 100);
 
         this.setState({
-          reviews: data,
+          data: data,
           overallRating: overallRating,
           overallRatings: overallRatings,
           otherRatings: otherRatings,
@@ -120,13 +109,15 @@ class App extends React.Component {
           noiseLevel: noiseLevel,
           recommend: recommendPercent,
           pages: this.getPages(data),
-          currentReviews: data.slice(0, 50)
+          currentReviews: data.slice(0, 50),
+          restaurantLocation: data[0].location,
+          lovedFor: data[0].lovedFor
         });
       });
   }
   
   changeChoice(choice) {
-    let restaurantId = Number(window.location.pathname.slice(12)).toString();
+    let restaurantId = Number(window.location.pathname.slice(13)).toString();
     this.getReviews(restaurantId, choice);
     this.setState({
       currentChoice: choice
@@ -148,13 +139,12 @@ class App extends React.Component {
     let start = (pageNumber - 1) * 50;
     this.setState({
       currentPage: pageNumber,
-      currentReviews: this.state.reviews.slice(start, start + 50)
+      currentReviews: this.state.data.slice(start, start + 50)
     });
   }
 
   componentDidMount() {
-    let restaurantId = Number(window.location.pathname.slice(12)).toString();
-    this.getRestaurant(restaurantId);
+    let restaurantId = Number(window.location.pathname.slice(13)).toString();
     this.getReviews(restaurantId, this.state.currentChoice);
   }
 
@@ -162,7 +152,7 @@ class App extends React.Component {
     return (
       <Body>
         <Overview
-          reviews={this.state.reviews}
+          reviews={this.state.data}
           overallRating={this.state.overallRating}
           otherRatings={this.state.otherRatings}
           ratingNames={this.state.ratingNames}
@@ -177,10 +167,10 @@ class App extends React.Component {
           changeChoice={this.changeChoice}
         ></Sort>
         <ReviewsBody>
-          {this.state.currentReviews.map((review) => {
+          {this.state.currentReviews.map((review, index) => {
             return (
               <Review
-                key={review.id}
+                key={index}
                 review={review}
               ></Review>
             );

@@ -313,7 +313,7 @@ exports.userDataMaker = () => {
   return {
     username: first + last,
     hometown: randomize(cities),
-    numOfReviews: Math.round(Math.random() * 25),
+    numOfReviews: Math.ceil(Math.random() * 150),
     vip: Math.floor(Math.random() * 2),
     iconColor: randomize(icons),
     abbreviation: first.slice(0, 1) + last.slice(0, 1)

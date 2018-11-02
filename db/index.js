@@ -1,9 +1,6 @@
 const mysql = require('mysql');
+const info = require('../config.js');
 
-const connection = mysql.createConnection({
-  user: 'root',
-  password: '',
-  database: 'tableOpenReviews'
-});
+const pool = mysql.createPool(info);
 
-module.exports = connection;
+module.exports = pool;

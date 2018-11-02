@@ -126,8 +126,8 @@ class Sort extends React.Component {
         <TopBar onClick={this.clickDropdown}>
           <CurrentChoice>
             {this.props.currentChoice}
-            {this.state.dropdown ? <CloseIcon></CloseIcon> : <OpenIcon></OpenIcon>}
           </CurrentChoice>
+          {this.state.dropdown ? <CloseIcon></CloseIcon> : <OpenIcon></OpenIcon>}
         </TopBar>
         {this.state.dropdown ?
           <Options>
