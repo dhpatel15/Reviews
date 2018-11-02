@@ -1,95 +1,34 @@
-const db = require('../../db/index.js');
-const Promise = require('bluebird');
-
-const queryPromise = Promise.promisify(db.query.bind(db));
+const mysqlPool = require('../../db/index.js');
 
 module.exports = {
-  addUser: (user) => {
-    return queryPromise(
-      `INSERT INTO users
-      (username, hometown, numOfReviews, VIP, iconColor, abbreviation)
-      VALUES (?)`,
-      [[user.username, user.hometown, user.numOfReviews, user.vip, user.iconColor, user.abbreviation]]
-    )
-      .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-  },
-  addRestaurant: (restaurant) => {
-    return queryPromise(
-      `INSERT INTO restaurants
-      (location, lovedFor)
-      VALUES (?)`,
-      [[restaurant.location, restaurant.lovedFor]]
-    )
-      .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-  },
-  addReview: (review) => {
-    return queryPromise(
-      `INSERT INTO reviews
-      (userId, restaurantId, overallRating, foodRating, serviceRating, ambienceRating, valueRating, noiseLevel, dinedDate, reviewText, isRecommended, recommendFor)
-      VALUES (?)`,
-      [[review.userId, review.restaurantId, review.overallRating, review.foodRating, review.serviceRating, review.ambienceRating, review.valueRating, review.noiseLevel, review.dinedDate, review.reviewText, review.isRecommended, review.recommendFor]]
-    )
-      .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-  },
-  getUserById: (id) => {
-    return queryPromise(
-      `SELECT * FROM users
-      WHERE id = ?`,
-      [id]
-    )
-      .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-  },
-  getRestaurantById: (id) => {
-    return queryPromise(
-      `SELECT * FROM restaurants
-      WHERE id = ?`,
-      [id]
-    )
-      .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-  },
-  getReviewsByRestaurantId: (id) => {
-    return queryPromise(
-      `SELECT * FROM reviews
-      WHERE restaurantId = ?
-      ORDER BY dinedDate DESC`,
-      [id]
-    )
-      .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
-  },
-  getReviewsByUserId: (id) => {
-    return queryPromise(
-      `SELECT * FROM reviews
-      WHERE userId = ?`,
-      [id]
-    )
-      .catch((err) => {
-        if (err) {
-          console.error(err);
-        }
-      });
+  getAllReviews: (id, choice, callback) => {
+    const sorter = {
+      'Newest': `select * from users
+        inner join reviews on reviews.userId=users.id 
+        inner join restaurants on reviews.restaurantId=restaurants.id
+        where restaurants.id=? order by reviews.dinedDate DESC`,
+      'Lowest rating': `select * from users
+        inner join reviews on reviews.userId=users.id 
+        inner join restaurants on reviews.restaurantId=restaurants.id
+        where restaurants.id=? order by reviews.overallRating ASC`,
+      'Highest rating': `select * from users
+        inner join reviews on reviews.userId=users.id 
+        inner join restaurants on reviews.restaurantId=restaurants.id
+        where restaurants.id=? order by reviews.overallRating DESC`,
+    };
+    mysqlPool.getConnection((err, connection) => {
+      if (err) {
+        console.log(err);
+      } else {
+        connection.query(sorter[choice], [id], (err, results) => {
+          if (err) {
+            console.log(err);
+          } else {
+            connection.end();
+            callback(results);
+          }
+        });
+      }
+    });
   }
 };

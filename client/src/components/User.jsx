@@ -92,60 +92,23 @@ const NumOfReviews = styled.span`
 class User extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      user: {},
-      userReviews: 0
-    };
-    this.getUser = this.getUser.bind(this);
-    this.countUserReviews = this.countUserReviews.bind(this);
-  }
-
-  getUser() {
-    axios.get('/users', {params: {id: this.props.review.userId}})
-      .then(({data}) => {
-        this.setState({
-          user: data[0]
-        });
-      });
-  }
-
-  countUserReviews() {
-    axios.get('/reviews', {params: {id: this.props.review.userId}})
-      .then(({data}) => {
-        this.setState({
-          userReviews: data.length
-        });
-      });
-  }
-
-  componentDidUpdate(prevProps) {
-    const newProps = this.props;
-    if (newProps.review.id !== prevProps.review.id) {
-      this.getUser();
-      this.countUserReviews();
-    }
-  }
-
-  componentDidMount() {
-    this.getUser();
-    this.countUserReviews();
   }
 
   render() {
     return (
       <UserBody>
-        <Icon style={{background: `rgb${this.state.user.iconColor}`}}>
-          <Abbreviation>{this.state.user.abbreviation}</Abbreviation>
+        <Icon style={{background: `rgb${this.props.review.iconColor}`}}>
+          <Abbreviation>{this.props.review.abbreviation}</Abbreviation>
         </Icon>
         <Username>
-          {this.state.user.vip === 1 ? <VIP>VIP</VIP> : <span></span>}
-          <span>{this.state.user.username}</span>
+          {this.props.review.vip === 1 ? <VIP>VIP</VIP> : <span></span>}
+          <span>{this.props.review.username}</span>
         </Username>
-        <Location>{this.state.user.hometown}</Location>
+        <Location>{this.props.review.hometown}</Location>
         <UserReviews>
           <ReviewIcon></ReviewIcon>
           <NumOfReviews>
-            {this.state.userReviews === 1 ? this.state.userReviews + ' review' : this.state.userReviews + ' reviews'}
+            {this.props.review.numOfReviews === 1 ? this.props.review.numOfReviews + ' review' : this.props.review.numOfReviews + ' reviews'}
           </NumOfReviews>
         </UserReviews>
       </UserBody>

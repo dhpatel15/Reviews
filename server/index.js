@@ -8,7 +8,16 @@ const app = express();
 
 app.use(parser.json());
 app.use(express.static(path.join(__dirname, '../client/dist')));
-app.use(router);
+
+app.get('/restaurants/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
+
+app.get('/favicon.ico', (req, res) => {
+  res.send();
+});
+
+app.use('/API/Reviews', router);
 app.use(compression);
 
 app.listen(3020, () => {
