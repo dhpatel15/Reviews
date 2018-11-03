@@ -109,17 +109,33 @@ class Review extends React.Component {
   render() {
     return (
       <Body>
-        {this.props.currentPage === 1 ? <LeftArrowNoHover></LeftArrowNoHover> : <LeftArrow onClick={() => this.props.newPage(this.props.currentPage - 1)}></LeftArrow>}
+        {this.props.currentPage === 1 ?
+          <LeftArrowNoHover></LeftArrowNoHover> :
+          <LeftArrow onClick={
+            () => {
+              return this.props.newPage(this.props.currentPage - 1);
+            }
+          }></LeftArrow>}
         <div>
           {this.props.pages.map((page, index) => {
             if (page === this.props.currentPage) {
               return <CurrentPage key={index}>{page}</CurrentPage>;
             } else {
-              return <OtherPages onClick={() => this.props.newPage(page)} key={index}>{page}</OtherPages>;
+              return <OtherPages onClick={
+                () => {
+                  return this.props.newPage(page);
+                }
+              } key={index}>{page}</OtherPages>;
             }
           })}
         </div>
-        {this.props.currentPage === this.props.pages.length ? <RightArrowNoHover></RightArrowNoHover> : <RightArrow onClick={() => this.props.newPage(this.props.currentPage + 1)}></RightArrow>}
+        {this.props.currentPage === this.props.pages.length ?
+          <RightArrowNoHover></RightArrowNoHover> :
+          <RightArrow onClick={
+            () => {
+              return this.props.newPage(this.props.currentPage + 1);
+            }
+          }></RightArrow>}
       </Body>
     );
   }

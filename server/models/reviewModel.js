@@ -24,7 +24,7 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            connection.end();
+            connection.release();
             callback(results);
           }
         });

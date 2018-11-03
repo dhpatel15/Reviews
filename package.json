@@ -9,7 +9,7 @@
     "node": ">=6.13.0"
   },
   "scripts": {
-    "react-dev": "webpack -d --watch",
+    "react-dev": "webpack -d --env.SC_ATTR=reviews --watch",
     "server-dev": "nodemon server/index.js",
     "seed": "mysql -u root -p < ./db/reviewsSchema.sql && node ./db/buildUserData.js && node ./db/buildRestaurantData.js && node ./db/buildReviewsData.js",
     "test": "jest ./spec/test.js",

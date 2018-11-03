@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const path = require('path');
-const url = 'http://localhost:3020';
+const url = 'http://34.207.247.29';
 const axios = require('axios');
 
 let page;
@@ -16,7 +16,7 @@ beforeAll(async () => {
   });
   page = await browser.newPage();
   await page.setViewport({ width, height });
-  await page.goto(path.join(url, '/restaurant/45'), { waitFor: 'networkidle2' });
+  await page.goto(path.join(url, '/restaurants/75'), { waitFor: 'networkidle2' });
 });
 
 afterAll(() => {
@@ -27,7 +27,7 @@ describe('app functionality', () => {
   test('title loads', async () => {
     const div = '.sc-eNQAEJ.bNUVBo';
     const title = await page.$eval(div, (el) => el.textContent);
-    expect(title).toEqual('What 107 People Are Saying')
+    expect(title).toEqual('What 92 People Are Saying')
   })
 
   test('food rating', async () => {
@@ -39,7 +39,7 @@ describe('app functionality', () => {
 
 describe('test API', () => {
   test('get restaurant by id', async () => {
-    await axios.get('http://localhost:3020/restaurants?id=45')
+    await axios.get('http://34.207.247.29/API/Reviews/reviews/all?id=45')
       .then(({data}) => {
         expect(data).toBeDefined();
         expect(data[0].id).toEqual(45);
