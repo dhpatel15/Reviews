@@ -1,6 +1,10 @@
 # Reviews Component
 This component displays the reviews for each restaurant in the TableOpen application.
 
+<img src="https://github.com/hrnyc18-TableOpen/Reviews/blob/master/TableOpenGIF1.gif" width="65%" height="65%">
+<img src="https://github.com/hrnyc18-TableOpen/Reviews/blob/master/TableOpenGIF2.gif" width="65%" height="65%">
+
+
 ## Related Projectts
 
   - https://github.com/hrnyc18-tableOpen/MattProxyServer
