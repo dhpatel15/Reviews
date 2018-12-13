@@ -1,6 +1,8 @@
 # Reviews Component
 This component displays the reviews for each restaurant in the TableOpen application.
 
+Follow this link to see the deployed microservice, which accepts id's from 1 to 100: http://54.173.43.234/restaurants/33
+
 <img src="https://github.com/hrnyc18-TableOpen/Reviews/blob/master/TableOpenGIF1.gif" width="65%" height="65%">
 <img src="https://github.com/hrnyc18-TableOpen/Reviews/blob/master/TableOpenGIF2.gif" width="65%" height="65%">
 
